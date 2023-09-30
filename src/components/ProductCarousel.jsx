@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Slider from "react-slick";
 import {
   Card,
@@ -10,46 +10,23 @@ import {
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-const products = [
-  {
-    name: "New Product Name 1", // Updated product name here
-    price: 200, // Updated product price here
-    imageUrl: "https://loremflickr.com/640/480/abstract",
-  },
-  {
-    name: "New Product Name 2", // Updated product name here
-    price: 250, // Updated product price here
-    imageUrl: "https://loremflickr.com/640/480/abstract",
-  },
-  {
-    name: "New Product Name 3", // Updated product name here
-    price: 220, // Updated product price here
-    imageUrl: "https://loremflickr.com/640/480/abstract",
-  },
-  {
-    name: "New Product Name 4", // Updated product name here
-    price: 230, // Updated product price here
-    imageUrl: "https://loremflickr.com/640/480/abstract",
-  },
-  {
-    name: "New Product Name 4", // Updated product name here
-    price: 230, // Updated product price here
-    imageUrl: "https://loremflickr.com/640/480/abstract",
-  },
-  {
-    name: "New Product Name 4", // Updated product name here
-    price: 230, // Updated product price here
-    imageUrl: "https://loremflickr.com/640/480/abstract",
-  },
-  {
-    name: "New Product Name 4", // Updated product name here
-    price: 230, // Updated product price here
-    imageUrl: "https://loremflickr.com/640/480/abstract",
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../redux/features/cartSlice";
 
 const ProductCarousel = () => {
+  const dispatch = useDispatch();
+  const { status, products } = useSelector((state) => state.cartReducer);
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(getProducts());
+    }
+  }, [status, dispatch]);
+
+  let productArray;
+  if (status === "succeeded") {
+    productArray = products.slice(0,10);
+  }
+
   const settings = {
     dots: true,
     infinite: true,
@@ -78,21 +55,21 @@ const ProductCarousel = () => {
 
   return (
     <Slider {...settings}>
-      {products.map((product, index) => (
+      {productArray.map((product, index) => (
         <Card
           key={index}
           style={{
             width: "200px",
             height: "400px",
             backgroundColor: "#f5f6fa",
-            margin:"0 4rem"
+            margin: "0 4rem",
           }}
         >
           <CardMedia
             component="img"
-            alt={product.name}
+            alt={product.productName}
             height="240"
-            image={product.imageUrl}
+            image={product.image}
             style={{
               padding: "10px",
               borderRadius: "5px",
@@ -108,7 +85,7 @@ const ProductCarousel = () => {
               }}
             >
               <Typography variant="h6" component="div">
-                {product.name}
+                {product.productName}
               </Typography>
               <Typography variant="h6" component="div">
                 ${product.price}

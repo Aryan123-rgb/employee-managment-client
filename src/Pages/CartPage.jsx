@@ -13,7 +13,7 @@ import {
 } from "mdb-react-ui-kit";
 import React from "react";
 
-export default function QuantityEdit() {
+export default function CartPage() {
   return (
     <section className="h-100 h-custom" style={{ backgroundColor: "#eee" }}>
       <MDBContainer className="py-5 h-100">

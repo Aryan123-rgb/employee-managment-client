@@ -2,7 +2,7 @@ import React from "react";
 import { TextField, Button, Typography, Grid } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ProductCarousel from "../components/ProductCarousel";
-import RegisterLog from "../components/RegisterLog"; // Importing the RegisterLog component
+import RegisterLog from "../components/RegisterLog";
 
 function DashBoard() {
   return (

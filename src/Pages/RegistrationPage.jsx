@@ -8,8 +8,8 @@ const RegistrationPage = () => {
 
   const initializeWebcam = () => {
     Webcam.set({
-      width: 480, // Adjusted width
-      height: 360, // Adjusted height
+      width: 480, 
+      height: 360,
       dest_width: 640,
       dest_height: 480,
       image_format: "jpeg",
