@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import {
   Card,
@@ -6,6 +6,7 @@ import {
   CardMedia,
   Typography,
   Button,
+  IconButton,
 } from "@mui/material";
 
 import "slick-carousel/slick/slick.css";
@@ -15,6 +16,7 @@ import { getProducts } from "../redux/features/cartSlice";
 
 const ProductCarousel = () => {
   const dispatch = useDispatch();
+
   const { status, products } = useSelector((state) => state.cartReducer);
   useEffect(() => {
     if (status === "idle") {
@@ -22,10 +24,29 @@ const ProductCarousel = () => {
     }
   }, [status, dispatch]);
 
-  let productArray;
+  let result;
   if (status === "succeeded") {
-    productArray = products.slice(0,10);
+    result = products.slice(0, 10).map((product) => {
+      return {
+        ...product,
+        qty: 1,
+      };
+    });
   }
+
+  const [productArray, setProductArray] = useState(result);
+
+  const handleDecrement = (index) => {
+    if (productArray[index].qty > 1) {
+      productArray[index].qty = productArray[index].qty - 1;
+      setProductArray([...productArray]);
+    }
+  };
+
+  const handleIncrement = (index) => {
+    productArray[index].qty = productArray[index].qty + 1;
+    setProductArray([...productArray]);
+  };
 
   const settings = {
     dots: true,
@@ -55,7 +76,7 @@ const ProductCarousel = () => {
 
   return (
     <Slider {...settings}>
-      {productArray.map((product, index) => (
+      {productArray?.map((product, index) => (
         <Card
           key={index}
           style={{
@@ -73,7 +94,7 @@ const ProductCarousel = () => {
             style={{
               padding: "10px",
               borderRadius: "5px",
-              marginTop: "-10px", // Adjust the value as needed
+              marginTop: "-10px",
             }}
           />
           <CardContent>
@@ -94,10 +115,35 @@ const ProductCarousel = () => {
             <div
               style={{
                 display: "flex",
+                alignItems: "center",
                 marginTop: "10px",
+                justifyContent: "space-between",
               }}
             >
               <button className="custom-button">Add to Cart</button>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.81rem",
+                }}
+              >
+                <IconButton
+                  color="primary"
+                  onClick={() => handleDecrement(index)}
+                >
+                  -
+                </IconButton>
+                <Typography variant="body1" component="div">
+                  {product.qty}
+                </Typography>
+                <IconButton
+                  color="primary"
+                  onClick={() => handleIncrement(index)}
+                >
+                  +
+                </IconButton>
+              </div>
             </div>
           </CardContent>
         </Card>
