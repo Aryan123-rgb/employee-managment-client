@@ -1,146 +1,94 @@
-import React, { useState } from "react";
-import { Button, TextField, Container, Typography, Grid } from "@mui/material";
-import { styled } from "@mui/system";
-import GoogleIcon from "@mui/icons-material/Google";
-import GitHubIcon from "@mui/icons-material/GitHub";
+import React from "react";
+import {
+  MDBBtn,
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBCard,
+  MDBCardBody,
+  MDBInput,
+  MDBIcon,
+  MDBCheckbox,
+} from "mdb-react-ui-kit";
 
-const CenteredContainer = styled(Container)({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  height: "100vh",
-});
-
-const OrLine = styled("div")({
-  display: "flex",
-  alignItems: "center",
-  width: "100%",
-  textAlign: "center",
-  "&::before, &::after": {
-    content: '""',
-    flex: 1,
-    borderBottom: "1px solid #ccc",
-  },
-  "&::before": {
-    marginRight: "0.5em",
-  },
-  "&::after": {
-    marginLeft: "0.5em",
-  },
-});
-
-const Login = ({ activeComponent, setActiveComponent }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // Add login logic here
-  };
-
+function Login({ activeComponent, setActiveComponent }) {
   return (
     <>
       {activeComponent === "login" && (
-        <CenteredContainer maxWidth="sm">
-          <form onSubmit={handleLogin}>
-            <Typography variant="h4" align="center">
-              Welcome back
-            </Typography>
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Email"
-              variant="outlined"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Password"
-              type="password"
-              variant="outlined"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{
-                width: "100%",
-                color: "#fff",
-                marginTop: 2,
-                marginBottom: 2,
-                paddingBlock: 1.2,
-                fontSize: "1.2rem",
-              }}
-            >
-              Login
-            </Button>
-            <Typography sx={{ textAlign: "center", margin: "5px" }}>
-              Don't have an account?{" "}
-              <span
-                onClick={() => setActiveComponent("signup")}
-                style={{ color: "#4285f4", cursor: "pointer" }}
+        <MDBContainer fluid>
+          <MDBRow className="d-flex justify-content-center align-items-center h-100">
+            <MDBCol col="12">
+              <MDBCard
+                className="bg-white my-5 mx-auto"
+                style={{ borderRadius: "1rem", maxWidth: "500px" }}
               >
-                Sign up
-              </span>
-            </Typography>
-            <OrLine>
-              <Typography variant="body1">or</Typography>
-            </OrLine>
-            <Grid
-              container
-              justifyContent="center"
-              alignItems="center"
-              marginTop={2}
-            >
-              <Grid item>
-                <Button
-                  variant="contained"
-                  style={{
-                    width: "100%",
-                    backgroundColor: "#4285F4",
-                    color: "#fff",
-                    padding: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                  startIcon={<GoogleIcon />}
-                >
-                  Continue with Google
-                </Button>
-              </Grid>
-            </Grid>
-            <Grid
-              container
-              justifyContent="center"
-              alignItems="center"
-              marginTop={2}
-            >
-              <Grid item>
-                <Button
-                  variant="contained"
-                  style={{
-                    width: "100%",
-                    backgroundColor: "#000",
-                    color: "#fff",
-                    padding: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                  startIcon={<GitHubIcon />}
-                >
-                  Continue with GitHub
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-        </CenteredContainer>
+                <MDBCardBody className="p-5 w-100 d-flex flex-column">
+                  <h2 className="fw-bold mb-2 text-center">Login</h2>
+                  <p className="text-white-50 mb-3">
+                    Please enter your login and password!
+                  </p>
+
+                  <MDBInput
+                    wrapperClass="mb-4 w-100"
+                    label="Email address"
+                    id="formControlLg"
+                    type="email"
+                    size="lg"
+                  />
+                  <MDBInput
+                    wrapperClass="mb-4 w-100"
+                    label="Password"
+                    id="formControlLg"
+                    type="password"
+                    size="lg"
+                  />
+
+                  <MDBCheckbox
+                    name="flexCheck"
+                    id="flexCheckDefault"
+                    className="mb-4"
+                    label="Remember password"
+                  />
+
+                  <MDBBtn size="lg">Login</MDBBtn>
+
+                  <hr className="my-4" />
+
+                  <MDBBtn
+                    className="mb-2 w-100"
+                    size="lg"
+                    style={{ backgroundColor: "#dd4b39" }}
+                  >
+                    <MDBIcon fab icon="google" className="mx-2" />
+                    continue with google
+                  </MDBBtn>
+
+                  <MDBBtn
+                    className="mb-4 w-100"
+                    size="lg"
+                    style={{ backgroundColor: "#000000" }}
+                  >
+                    <MDBIcon fab icon="github" className="mx-2" />
+                    continue with GitHub
+                  </MDBBtn>
+                  <p style={{ textAlign: "center" }}>
+                    Don't have an account?
+                    <span
+                      onClick={() => setActiveComponent("signup")}
+                      style={{ cursor: "pointer", color: "#3b71ca" }}
+                    >
+                      {" "}
+                      Sign Up
+                    </span>
+                  </p>
+                </MDBCardBody>
+              </MDBCard>
+            </MDBCol>
+          </MDBRow>
+        </MDBContainer>
       )}
     </>
   );
-};
+}
 
 export default Login;

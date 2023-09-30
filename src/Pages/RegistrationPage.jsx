@@ -52,8 +52,9 @@ const RegistrationPage = () => {
           </Typography>
         </Grid>
         <Grid item>
-          <Typography variant="body1" align="center" >
-            Take your photo in a clear background and make sure your face is properly visible and your eyes are facing the camera
+          <Typography variant="body1" align="center">
+            Take your photo in a clear background and make sure your face is
+            properly visible and your eyes are facing the camera
           </Typography>
         </Grid>
         <Grid item>
