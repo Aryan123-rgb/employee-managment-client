@@ -17,7 +17,39 @@ const initialState = {
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    addToCart: (state, action) => {
+      const itemIndex = state.carts.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      if (itemIndex >= 0) {
+        state.carts[itemIndex].qty += action.payload.qty;
+      } else state.carts = [...state.carts, action.payload];
+    },
+    removeFromCart: (state, action) => {
+      state.carts = state.carts.filter((item) => item.id !== action.payload.id);
+    },
+    saveCart: (state, action) => {
+      state.carts = action.payload;
+    },
+    emptyCart: (state, action) => {
+      state.carts = [];
+    },
+    incrementQty: (state, action) => {
+      const itemIndex = state.carts.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      state.carts[itemIndex].qty += 1;
+    },
+    decrementQty: (state, action) => {
+      const itemIndex = state.carts.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      if (state.carts[itemIndex].qty > 1) {
+        state.carts[itemIndex].qty -= 1;
+      }
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(getProducts.pending, (state) => {
@@ -32,5 +64,14 @@ const cartSlice = createSlice({
       });
   },
 });
+
+export const {
+  addToCart,
+  removeFromCart,
+  saveCart,
+  emptyCart,
+  incrementQty,
+  decrementQty,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, Button, Typography, Grid } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ProductCarousel from "../components/ProductCarousel";
 import RegisterLog from "../components/RegisterLog";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function DashBoard() {
+  const navigate = useNavigate();
+  const cartItemCount = useSelector((state) => state.cartReducer.carts?.length);
+
+  const goToCartPage = () => {
+    if (cartItemCount === 0) {
+      alert("Cart is currently empty");
+    } else navigate("/cart");
+  };
   return (
     <div
       style={{
@@ -21,7 +31,7 @@ function DashBoard() {
           alignItems: "center",
         }}
       >
-        <div style={{marginLeft:"60px"}}>
+        <div style={{ marginLeft: "60px" }}>
           <Typography variant="h4" gutterBottom>
             Welcome Aryan
           </Typography>
@@ -64,7 +74,25 @@ function DashBoard() {
             Search
           </Button>
         </div>
-        <ShoppingCartIcon fontSize="large" />
+        <ShoppingCartIcon sx={{cursor:'pointer'}} onClick={goToCartPage} fontSize="large" />
+        {cartItemCount > 0 && (
+          <div
+            style={{
+              position: "absolute",
+              top: "46%",
+              left: "96%",
+              background: "#e74c3c",
+              borderRadius: "50%",
+              padding: "4px 8px",
+              color: "white",
+              fontSize: "9px",
+              cursor:'pointer'
+            }}
+            onClick={goToCartPage}
+          >
+            {cartItemCount}
+          </div>
+        )}
       </div>
 
       <ProductCarousel />

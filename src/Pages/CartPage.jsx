@@ -11,11 +11,30 @@ import {
   MDBRow,
   MDBTypography,
 } from "mdb-react-ui-kit";
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  decrementQty,
+  emptyCart,
+  incrementQty,
+  removeFromCart,
+} from "../redux/features/cartSlice";
+import { useNavigate } from "react-router-dom";
+import { IconButton, Typography } from "@mui/material";
 
 export default function CartPage() {
+  const { carts } = useSelector((state) => state.cartReducer);
+  let totalPrice = 0;
+  carts.map((product) => {
+    totalPrice += product.qty * product.price;
+  });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   return (
-    <section className="h-100 h-custom" style={{ backgroundColor: "#eee" }}>
+    <section
+      className="h-custom"
+      style={{ backgroundColor: "#eee", minHeight: "100vh" }}
+    >
       <MDBContainer className="py-5 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">
           <MDBCol size="12">
@@ -35,175 +54,111 @@ export default function CartPage() {
                           Shopping Cart
                         </MDBTypography>
                         <MDBTypography className="mb-0 text-muted">
-                          3 items
+                          {carts?.length} items
                         </MDBTypography>
                       </div>
-
                       <hr className="my-4" />
 
-                      <MDBRow className="mb-4 d-flex justify-content-between align-items-center">
-                        <MDBCol md="2" lg="2" xl="2">
-                          <MDBCardImage
-                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img5.webp"
-                            fluid
-                            className="rounded-3"
-                            alt="Cotton T-shirt"
-                          />
-                        </MDBCol>
-                        <MDBCol md="3" lg="3" xl="3">
-                          <MDBTypography tag="h6" className="text-muted">
-                            Shirt
-                          </MDBTypography>
-                          <MDBTypography tag="h6" className="text-black mb-0">
-                            Cotton T-shirt
-                          </MDBTypography>
-                        </MDBCol>
-                        <MDBCol
-                          md="3"
-                          lg="3"
-                          xl="3"
-                          className="d-flex align-items-center"
-                        >
-                          <MDBBtn color="link" className="px-2">
-                            <MDBIcon fas icon="minus" />
-                          </MDBBtn>
+                      {carts?.map((product, index) => (
+                        <>
+                          <MDBRow className="mb-4 d-flex justify-content-between align-items-center">
+                            <MDBCol md="2" lg="2" xl="2">
+                              <MDBCardImage
+                                src={product.image}
+                                fluid
+                                className="rounded-3"
+                                alt="Cotton T-shirt"
+                              />
+                            </MDBCol>
+                            <MDBCol md="3" lg="3" xl="3">
+                              <MDBTypography
+                                tag="h6"
+                                className="text-black mb-0"
+                              >
+                                {product.productName}
+                              </MDBTypography>
+                            </MDBCol>
+                            <MDBCol
+                              md="3"
+                              lg="3"
+                              xl="3"
+                              className="d-flex align-items-center"
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "0.81rem",
+                                }}
+                              >
+                                <IconButton
+                                  color="primary"
+                                  onClick={() =>
+                                    dispatch(decrementQty(product))
+                                  }
+                                >
+                                  -
+                                </IconButton>
+                                <Typography variant="body1" component="div">
+                                  {product.qty}
+                                </Typography>
+                                <IconButton
+                                  color="primary"
+                                  onClick={() =>
+                                    dispatch(incrementQty(product))
+                                  }
+                                >
+                                  +
+                                </IconButton>
+                              </div>
+                            </MDBCol>
+                            <MDBCol md="3" lg="2" xl="2" className="text-end">
+                              <MDBTypography tag="h6" className="mb-0">
+                                $ {product.price}
+                              </MDBTypography>
+                            </MDBCol>
+                            <MDBCol md="1" lg="1" xl="1" className="text-end">
+                              <p
+                                className="text-muted"
+                                style={{ cursor: "pointer" }}
+                                onClick={() =>
+                                  dispatch(removeFromCart(product))
+                                }
+                              >
+                                <MDBIcon fas icon="times" />
+                              </p>
+                            </MDBCol>
+                          </MDBRow>
 
-                          <MDBInput
-                            type="number"
-                            min="0"
-                            defaultValue={1}
-                            size="sm"
-                          />
+                          <hr className="my-4" />
+                        </>
+                      ))}
 
-                          <MDBBtn color="link" className="px-2">
-                            <MDBIcon fas icon="plus" />
-                          </MDBBtn>
-                        </MDBCol>
-                        <MDBCol md="3" lg="2" xl="2" className="text-end">
-                          <MDBTypography tag="h6" className="mb-0">
-                            € 44.00
-                          </MDBTypography>
-                        </MDBCol>
-                        <MDBCol md="1" lg="1" xl="1" className="text-end">
-                          <a href="#!" className="text-muted">
-                            <MDBIcon fas icon="times" />
-                          </a>
-                        </MDBCol>
-                      </MDBRow>
-
-                      <hr className="my-4" />
-
-                      <MDBRow className="mb-4 d-flex justify-content-between align-items-center">
-                        <MDBCol md="2" lg="2" xl="2">
-                          <MDBCardImage
-                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img6.webp"
-                            fluid
-                            className="rounded-3"
-                            alt="Cotton T-shirt"
-                          />
-                        </MDBCol>
-                        <MDBCol md="3" lg="3" xl="3">
-                          <MDBTypography tag="h6" className="text-muted">
-                            Shirt
-                          </MDBTypography>
-                          <MDBTypography tag="h6" className="text-black mb-0">
-                            Cotton T-shirt
-                          </MDBTypography>
-                        </MDBCol>
-                        <MDBCol
-                          md="3"
-                          lg="3"
-                          xl="3"
-                          className="d-flex align-items-center"
-                        >
-                          <MDBBtn color="link" className="px-2">
-                            <MDBIcon fas icon="minus" />
-                          </MDBBtn>
-
-                          <MDBInput
-                            type="number"
-                            min="0"
-                            defaultValue={1}
-                            size="sm"
-                          />
-
-                          <MDBBtn color="link" className="px-2">
-                            <MDBIcon fas icon="plus" />
-                          </MDBBtn>
-                        </MDBCol>
-                        <MDBCol md="3" lg="2" xl="2" className="text-end">
-                          <MDBTypography tag="h6" className="mb-0">
-                            € 44.00
-                          </MDBTypography>
-                        </MDBCol>
-                        <MDBCol md="1" lg="1" xl="1" className="text-end">
-                          <a href="#!" className="text-muted">
-                            <MDBIcon fas icon="times" />
-                          </a>
-                        </MDBCol>
-                      </MDBRow>
-
-                      <hr className="my-4" />
-
-                      <MDBRow className="mb-4 d-flex justify-content-between align-items-center">
-                        <MDBCol md="2" lg="2" xl="2">
-                          <MDBCardImage
-                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img7.webp"
-                            fluid
-                            className="rounded-3"
-                            alt="Cotton T-shirt"
-                          />
-                        </MDBCol>
-                        <MDBCol md="3" lg="3" xl="3">
-                          <MDBTypography tag="h6" className="text-muted">
-                            Shirt
-                          </MDBTypography>
-                          <MDBTypography tag="h6" className="text-black mb-0">
-                            Cotton T-shirt
-                          </MDBTypography>
-                        </MDBCol>
-                        <MDBCol
-                          md="3"
-                          lg="3"
-                          xl="3"
-                          className="d-flex align-items-center"
-                        >
-                          <MDBBtn color="link" className="px-2">
-                            <MDBIcon fas icon="minus" />
-                          </MDBBtn>
-
-                          <MDBInput
-                            type="number"
-                            min="0"
-                            defaultValue={1}
-                            size="sm"
-                          />
-
-                          <MDBBtn color="link" className="px-2">
-                            <MDBIcon fas icon="plus" />
-                          </MDBBtn>
-                        </MDBCol>
-                        <MDBCol md="3" lg="2" xl="2" className="text-end">
-                          <MDBTypography tag="h6" className="mb-0">
-                            € 44.00
-                          </MDBTypography>
-                        </MDBCol>
-                        <MDBCol md="1" lg="1" xl="1" className="text-end">
-                          <a href="#!" className="text-muted">
-                            <MDBIcon fas icon="times" />
-                          </a>
-                        </MDBCol>
-                      </MDBRow>
-
-                      <hr className="my-4" />
-
-                      <div className="pt-5">
+                      <div
+                        className="pt-5"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
                         <MDBTypography tag="h6" className="mb-0">
-                          <MDBCardText tag="a" href="#!" className="text-body">
+                          <MDBCardText
+                            className="text-body"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => navigate("/dashboard")}
+                          >
                             <MDBIcon fas icon="long-arrow-alt-left me-2" /> Back
                             to shop
                           </MDBCardText>
                         </MDBTypography>
+                        <MDBBtn
+                          onClick={() => dispatch(emptyCart())}
+                          style={{ backgroundColor: "red" }}
+                          size="lg"
+                        >
+                          Empty Cart
+                        </MDBBtn>
                       </div>
                     </div>
                   </MDBCol>
@@ -220,33 +175,9 @@ export default function CartPage() {
 
                       <div className="d-flex justify-content-between mb-4">
                         <MDBTypography tag="h5" className="text-uppercase">
-                          items 3
+                          Total Items
                         </MDBTypography>
-                        <MDBTypography tag="h5">€ 132.00</MDBTypography>
-                      </div>
-
-                      <MDBTypography tag="h5" className="text-uppercase mb-3">
-                        Shipping
-                      </MDBTypography>
-
-                      <div className="mb-4 pb-2">
-                        <select
-                          className="select p-2 rounded bg-grey"
-                          style={{ width: "100%" }}
-                        >
-                          <option value="1">Standard-Delivery- €5.00</option>
-                          <option value="2">Two</option>
-                          <option value="3">Three</option>
-                          <option value="4">Four</option>
-                        </select>
-                      </div>
-
-                      <MDBTypography tag="h5" className="text-uppercase mb-3">
-                        Give code
-                      </MDBTypography>
-
-                      <div className="mb-5">
-                        <MDBInput size="lg" label="Enter your code" />
+                        <MDBTypography tag="h5">{carts?.length}</MDBTypography>
                       </div>
 
                       <hr className="my-4" />
@@ -255,11 +186,11 @@ export default function CartPage() {
                         <MDBTypography tag="h5" className="text-uppercase">
                           Total price
                         </MDBTypography>
-                        <MDBTypography tag="h5">€ 137.00</MDBTypography>
+                        <MDBTypography tag="h5">$ {totalPrice}</MDBTypography>
                       </div>
 
                       <MDBBtn color="dark" block size="lg">
-                        Register
+                        Save
                       </MDBBtn>
                     </div>
                   </MDBCol>

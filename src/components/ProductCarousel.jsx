@@ -12,9 +12,10 @@ import {
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../redux/features/cartSlice";
+import { addToCart, getProducts } from "../redux/features/cartSlice";
 
 const ProductCarousel = () => {
+  let [productArray, setProductArray] = useState([]);
   const dispatch = useDispatch();
 
   const { status, products } = useSelector((state) => state.cartReducer);
@@ -24,28 +25,27 @@ const ProductCarousel = () => {
     }
   }, [status, dispatch]);
 
-  let result;
-  if (status === "succeeded") {
-    result = products.slice(0, 10).map((product) => {
-      return {
+
+  useEffect(() => {
+    if (status === 'succeeded') {
+      const updatedArray = products.slice(0, 10).map((product) => ({
         ...product,
         qty: 1,
-      };
-    });
-  }
-
-  const [productArray, setProductArray] = useState(result);
+      }));
+      setProductArray(updatedArray);
+    }
+  }, [status]);
 
   const handleDecrement = (index) => {
     if (productArray[index].qty > 1) {
       productArray[index].qty = productArray[index].qty - 1;
-      setProductArray([...productArray]);
+      setProductArray([...productArray])
     }
   };
 
   const handleIncrement = (index) => {
     productArray[index].qty = productArray[index].qty + 1;
-    setProductArray([...productArray]);
+    setProductArray([...productArray])
   };
 
   const settings = {
@@ -73,6 +73,10 @@ const ProductCarousel = () => {
       },
     ],
   };
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product))
+  }
 
   return (
     <Slider {...settings}>
@@ -120,7 +124,12 @@ const ProductCarousel = () => {
                 justifyContent: "space-between",
               }}
             >
-              <button className="custom-button">Add to Cart</button>
+              <button
+                onClick={()=>handleAddToCart(product)}
+                className="custom-button"
+              >
+                Add to Cart
+              </button>
               <div
                 style={{
                   display: "flex",
