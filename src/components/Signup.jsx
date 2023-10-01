@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   MDBBtn,
   MDBContainer,
@@ -10,8 +10,27 @@ import {
   MDBIcon,
   MDBCheckbox,
 } from "mdb-react-ui-kit";
+import { useDispatch } from "react-redux";
+import { registerPage } from "../redux/features/userSlice";
+import { useNavigate } from "react-router-dom";
 
 function Signup({ activeComponent, setActiveComponent }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleRegister = () => {
+    const userCredentials = {
+      name: name,
+      email: email,
+      password: password,
+    };
+    dispatch(registerPage(userCredentials));
+    navigate('/register')
+  };
   return (
     <>
       {activeComponent === "signup" && (
@@ -33,6 +52,8 @@ function Signup({ activeComponent, setActiveComponent }) {
                     id="formControlLg"
                     type="text"
                     size="lg"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
                   <MDBInput
                     wrapperClass="mb-4 w-100"
@@ -40,6 +61,8 @@ function Signup({ activeComponent, setActiveComponent }) {
                     id="formControlLg"
                     type="email"
                     size="lg"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   <MDBInput
                     wrapperClass="mb-4 w-100"
@@ -47,6 +70,8 @@ function Signup({ activeComponent, setActiveComponent }) {
                     id="formControlLg"
                     type="password"
                     size="lg"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
 
                   <MDBCheckbox
@@ -56,7 +81,7 @@ function Signup({ activeComponent, setActiveComponent }) {
                     label="Remember password"
                   />
 
-                  <MDBBtn size="lg">Login</MDBBtn>
+                  <MDBBtn size="lg" onClick={handleRegister}>Sign Up</MDBBtn>
 
                   <hr className="my-4" />
 

@@ -1,14 +1,17 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Button, Container, Grid, Typography } from "@mui/material";
 import Webcam from "webcamjs";
+import { useSelector } from "react-redux";
 
 const RegistrationPage = () => {
+
   const videoRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
 
+
   const initializeWebcam = () => {
     Webcam.set({
-      width: 480, 
+      width: 480,
       height: 360,
       dest_width: 640,
       dest_height: 480,
