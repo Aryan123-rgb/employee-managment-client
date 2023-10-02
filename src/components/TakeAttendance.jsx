@@ -1,10 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Button, Grid, Typography, Paper } from "@mui/material";
 import Webcam from "webcamjs";
+import * as faceapi from "face-api.js";
+import { useSelector } from "react-redux";
 
 const TakeAttendance = ({ isTakingAttendance, setIsTakingAttendance }) => {
   const videoRef = useRef(null);
   const videoDiv = document.getElementById("videoRef");
+  const referencedImage = useSelector((state) => state.userReducer.image);
+  const [capturedImage, setCapturedImage] = useState(null);
 
   const initializeWebcam = () => {
     Webcam.set({
@@ -18,12 +22,78 @@ const TakeAttendance = ({ isTakingAttendance, setIsTakingAttendance }) => {
     Webcam.attach(videoRef?.current);
   };
 
+  const captureImage = () => {
+    Webcam.snap((data_uri) => {
+      setCapturedImage(data_uri);
+    });
+    compareImages();
+  };
+
   useEffect(() => {
-    initializeWebcam();
+    Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
+      faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+      faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+      faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
+    ]).then(initializeWebcam());
     return () => {
       Webcam.reset();
     };
   }, []);
+
+  const compareImages = async () => {
+    const capturedImageElement = document.createElement("img");
+    const referencedImageElement = document.createElement("img");
+
+    capturedImageElement.onerror = () => {
+      console.log("Error loading captured image.");
+      alert("Error loading captured image.");
+    };
+
+    referencedImageElement.onerror = () => {
+      console.log("Error loading referenced image.");
+      alert("Error loading referenced image.");
+    };
+
+    await Promise.all([
+      new Promise((resolve) => {
+        capturedImageElement.onload = resolve;
+        capturedImageElement.src = capturedImage;
+      }),
+      new Promise((resolve) => {
+        referencedImageElement.onload = resolve;
+        referencedImageElement.src = referencedImage;
+      }),
+    ]);
+
+    try {
+      const capturedFace = await faceapi
+        .detectSingleFace(capturedImageElement)
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+      const referencedFace = await faceapi
+        .detectSingleFace(referencedImageElement)
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+      console.log("Captured Face:", capturedFace);
+      console.log("Referenced Face:", referencedFace);
+
+      if (capturedFace && referencedFace) {
+        // const faceMatcher = new faceapi.FaceMatcher([
+        //   referencedFace.descriptor,
+        // ]);
+        // const match = faceMatcher.findBestMatch(capturedFace.descriptor);
+
+        alert(`Face Matched`);
+      } else {
+        alert("Please try again. Keep your head in the center and look directly into the camera while snapping the image");
+      }
+    } catch (error) {
+      alert("An error occurred during face detection.");
+    }
+  };
 
   return (
     <>
@@ -51,14 +121,31 @@ const TakeAttendance = ({ isTakingAttendance, setIsTakingAttendance }) => {
           }}
         >
           <div ref={videoRef}></div>
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ marginTop: "1rem" }}
-            onClick={() => setIsTakingAttendance(false)}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginInline: "1rem",
+            }}
           >
-            Close Modal
-          </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ marginTop: "1rem", backgroundColor: "green" }}
+              onClick={captureImage}
+            >
+              Mark as Present
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ marginTop: "1rem", backgroundColor: "red" }}
+              onClick={() => setIsTakingAttendance(false)}
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
       </div>
     </>

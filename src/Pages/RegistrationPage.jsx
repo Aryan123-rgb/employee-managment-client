@@ -3,8 +3,10 @@ import { Button, Container, Grid, Typography } from "@mui/material";
 import Webcam from "webcamjs";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageURL } from "../redux/features/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const RegistrationPage = () => {
+  const navigate = useNavigate();
   const videoRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
 
@@ -58,8 +60,7 @@ const RegistrationPage = () => {
         </Grid>
         <Grid item>
           <Typography variant="body1" align="center">
-            Take your photo in a clear background and make sure your face is
-            properly visible and your eyes are facing the camera
+            Place your head in the center and look directly into the camera while snapping
           </Typography>
         </Grid>
         <Grid item>
@@ -98,7 +99,11 @@ const RegistrationPage = () => {
         )}
         {capturedImage && (
           <Grid item container justifyContent="center" marginTop="10px">
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/dashboard")}
+            >
               Continue
             </Button>
           </Grid>
