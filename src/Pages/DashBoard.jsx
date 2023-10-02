@@ -5,10 +5,13 @@ import ProductCarousel from "../components/ProductCarousel";
 import RegisterLog from "../components/RegisterLog";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import TakeAttendance from "../components/TakeAttendance";
 
 function DashBoard() {
   const navigate = useNavigate();
   const cartItemCount = useSelector((state) => state.cartReducer.carts?.length);
+
+  const [isTakingAttendance, setIsTakingAttendance] = useState(false);
 
   const goToCartPage = () => {
     if (cartItemCount === 0) {
@@ -41,9 +44,14 @@ function DashBoard() {
             color="primary"
             style={{ marginBottom: "1rem" }}
             size="small"
+            onClick={() => setIsTakingAttendance(true)}
           >
             Take Attendance
           </Button>
+          <TakeAttendance
+            isTakingAttendance={isTakingAttendance}
+            setIsTakingAttendance={setIsTakingAttendance}
+          />
         </div>
 
         <div style={{ marginRight: "20px" }}>
@@ -74,7 +82,11 @@ function DashBoard() {
             Search
           </Button>
         </div>
-        <ShoppingCartIcon sx={{cursor:'pointer'}} onClick={goToCartPage} fontSize="large" />
+        <ShoppingCartIcon
+          sx={{ cursor: "pointer" }}
+          onClick={goToCartPage}
+          fontSize="large"
+        />
         {cartItemCount > 0 && (
           <div
             style={{
@@ -86,7 +98,7 @@ function DashBoard() {
               padding: "4px 8px",
               color: "white",
               fontSize: "9px",
-              cursor:'pointer'
+              cursor: "pointer",
             }}
             onClick={goToCartPage}
           >

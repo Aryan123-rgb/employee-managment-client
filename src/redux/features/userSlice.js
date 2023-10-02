@@ -17,9 +17,12 @@ const userSlice = createSlice({
       state.email = action.payload.email;
       state.password = action.payload.password;
     },
+    setImageURL: (state, action) => {
+      state.image = action.payload;
+    },
   },
 });
 
-export const { registerPage } = userSlice.actions;
+export const { registerPage, setImageURL } = userSlice.actions;
 
 export default userSlice.reducer;

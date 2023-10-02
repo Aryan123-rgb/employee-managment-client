@@ -1,13 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Button, Container, Grid, Typography } from "@mui/material";
 import Webcam from "webcamjs";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setImageURL } from "../redux/features/userSlice";
 
 const RegistrationPage = () => {
-
   const videoRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
 
+  const dispatch = useDispatch();
 
   const initializeWebcam = () => {
     Webcam.set({
@@ -24,6 +25,7 @@ const RegistrationPage = () => {
   const captureImage = () => {
     Webcam.snap((data_uri) => {
       setCapturedImage(data_uri);
+      dispatch(setImageURL(data_uri));
     });
   };
 
