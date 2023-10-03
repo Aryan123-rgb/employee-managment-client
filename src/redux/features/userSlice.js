@@ -20,9 +20,19 @@ const userSlice = createSlice({
     setImageURL: (state, action) => {
       state.image = action.payload;
     },
+    markPresent: (state, action) => {
+      const now = new Date();
+      state.attendanceRecord = [
+        ...state.attendanceRecord,
+        {
+          date: now.toLocaleDateString(),
+          time: now.toLocaleTimeString(),
+        },
+      ];
+    },
   },
 });
 
-export const { registerPage, setImageURL } = userSlice.actions;
+export const { registerPage, setImageURL, markPresent } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -8,85 +8,40 @@ import {
   TableRow,
   TableCell,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 
 function RegisterLog() {
-  const attendanceRecord = [
-    {
-      date: "31 September",
-      day: "Tuesday",
-      status: "present",
-    },
-    {
-      date: "31 September",
-      day: "Tuesday",
-      status: "present",
-    },
-    {
-      date: "31 September",
-      day: "Tuesday",
-      status: "present",
-    },
-    {
-      date: "31 September",
-      day: "Tuesday",
-      status: "present",
-    },
-    {
-      date: "31 September",
-      day: "Tuesday",
-      status: "present",
-    },
-    {
-      date: "31 September",
-      day: "Tuesday",
-      status: "present",
-    },
-    {
-      date: "31 September",
-      day: "Tuesday",
-      status: "present",
-    },
-    {
-      date: "31 September",
-      day: "Tuesday",
-      status: "present",
-    },
-    {
-      date: "31 September",
-      day: "Tuesday",
-      status: "present",
-    },
-    {
-      date: "31 September",
-      day: "Tuesday",
-      status: "present",
-    },
-  ];
+  const { attendanceRecord } = useSelector((state) => state.userReducer);
 
   return (
     <div
       style={{ marginRight: "40px", maxHeight: "400px", overflow: "scroll" }}
     >
-      <TableContainer
-        component={Paper}
-        sx={{ border: "1px solid black"  }}
-      >
+      <TableContainer component={Paper} sx={{ border: "1px solid black" }}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
               <TableCell>S.No</TableCell>
               <TableCell>Date</TableCell>
-              <TableCell>Day</TableCell>
+              <TableCell>Time</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {attendanceRecord.map((u) => (
+            {attendanceRecord?.map((u,index) => (
               <TableRow key={u.day}>
-                <TableCell>1.</TableCell>
-                <TableCell>31 September</TableCell>
-                <TableCell>Tuesday</TableCell>
-                <TableCell>Present</TableCell>
+                <TableCell>{index+1}</TableCell>
+                <TableCell>{u.date}</TableCell>
+                <TableCell>{u.time}</TableCell>
+                <TableCell
+                  sx={{
+                    color: "green",
+                    textTransform: "capitalize",
+                    fontWeight: "bold",
+                  }}
+                >
+                  PRESENT
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

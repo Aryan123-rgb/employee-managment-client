@@ -2,13 +2,15 @@ import React, { useRef, useState, useEffect } from "react";
 import { Button, Grid, Typography, Paper } from "@mui/material";
 import Webcam from "webcamjs";
 import * as faceapi from "face-api.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { markPresent } from "../redux/features/userSlice";
 
 const TakeAttendance = ({ isTakingAttendance, setIsTakingAttendance }) => {
   const videoRef = useRef(null);
   const videoDiv = document.getElementById("videoRef");
   const referencedImage = useSelector((state) => state.userReducer.image);
   const [capturedImage, setCapturedImage] = useState(null);
+  const dispatch = useDispatch();
 
   const initializeWebcam = () => {
     Webcam.set({
@@ -80,15 +82,21 @@ const TakeAttendance = ({ isTakingAttendance, setIsTakingAttendance }) => {
       console.log("Captured Face:", capturedFace);
       console.log("Referenced Face:", referencedFace);
 
-      if (capturedFace && referencedFace) {
-        // const faceMatcher = new faceapi.FaceMatcher([
-        //   referencedFace.descriptor,
-        // ]);
-        // const match = faceMatcher.findBestMatch(capturedFace.descriptor);
+      if (referencedFace && capturedFace) {
+        const faceMatcher = new faceapi.FaceMatcher([
+          referencedFace.descriptor,
+        ]);
+        const match = faceMatcher.findBestMatch(capturedFace.descriptor);
+        console.log(match);
 
-        alert(`Face Matched`);
+        if (match.distance > 0.3) {
+          alert(`Face Matched `);
+          dispatch(markPresent());
+        } else alert("Face didn't matched");
       } else {
-        alert("Please try again. Keep your head in the center and look directly into the camera while snapping the image");
+        alert(
+          "Please try again. Keep your head in the center and look directly into the camera while snapping the image"
+        );
       }
     } catch (error) {
       alert("An error occurred during face detection.");

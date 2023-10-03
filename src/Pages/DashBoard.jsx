@@ -10,7 +10,7 @@ import TakeAttendance from "../components/TakeAttendance";
 function DashBoard() {
   const navigate = useNavigate();
   const cartItemCount = useSelector((state) => state.cartReducer.carts?.length);
-
+  const { name } = useSelector((state) => state.userReducer);
   const [isTakingAttendance, setIsTakingAttendance] = useState(false);
 
   const goToCartPage = () => {
@@ -36,7 +36,7 @@ function DashBoard() {
       >
         <div style={{ marginLeft: "60px" }}>
           <Typography variant="h4" gutterBottom>
-            Welcome Aryan
+            Welcome {name}
           </Typography>
 
           <Button

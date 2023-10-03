@@ -9,6 +9,7 @@ const RegistrationPage = () => {
   const navigate = useNavigate();
   const videoRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
+  const { name } = useSelector((state) => state.userReducer);
 
   const dispatch = useDispatch();
 
@@ -55,12 +56,13 @@ const RegistrationPage = () => {
       >
         <Grid item>
           <Typography variant="h4" gutterBottom>
-            Welcome Aryan
+            Welcome {name}
           </Typography>
         </Grid>
         <Grid item>
           <Typography variant="body1" align="center">
-            Place your head in the center and look directly into the camera while snapping
+            Place your head in the center and look directly into the camera
+            while snapping
           </Typography>
         </Grid>
         <Grid item>
