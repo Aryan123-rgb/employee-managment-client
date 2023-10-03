@@ -18,6 +18,7 @@ function Signup({ activeComponent, setActiveComponent }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,9 +28,10 @@ function Signup({ activeComponent, setActiveComponent }) {
       name: name,
       email: email,
       password: password,
+      isAdmin: isAdmin,
     };
     dispatch(registerPage(userCredentials));
-    navigate('/register')
+    navigate("/register");
   };
   return (
     <>
@@ -78,10 +80,13 @@ function Signup({ activeComponent, setActiveComponent }) {
                     name="flexCheck"
                     id="flexCheckDefault"
                     className="mb-4"
-                    label="Remember password"
+                    label="Register as Admin"
+                    onChange={(e) => setIsAdmin(e.target.checked)}
                   />
 
-                  <MDBBtn size="lg" onClick={handleRegister}>Sign Up</MDBBtn>
+                  <MDBBtn size="lg" onClick={handleRegister}>
+                    Sign Up
+                  </MDBBtn>
 
                   <hr className="my-4" />
 

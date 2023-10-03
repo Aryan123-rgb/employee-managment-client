@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   MDBBtn,
   MDBContainer,
@@ -10,8 +10,18 @@ import {
   MDBIcon,
   MDBCheckbox,
 } from "mdb-react-ui-kit";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../redux/features/userSlice";
 
 function Login({ activeComponent, setActiveComponent }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+
+  const handleLogin = () => {
+    const userData = { email, password };
+    const response = dispatch(loginUser(userData));
+  };
   return (
     <>
       {activeComponent === "login" && (
@@ -34,6 +44,8 @@ function Login({ activeComponent, setActiveComponent }) {
                     id="formControlLg"
                     type="email"
                     size="lg"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   <MDBInput
                     wrapperClass="mb-4 w-100"
@@ -41,16 +53,13 @@ function Login({ activeComponent, setActiveComponent }) {
                     id="formControlLg"
                     type="password"
                     size="lg"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
 
-                  <MDBCheckbox
-                    name="flexCheck"
-                    id="flexCheckDefault"
-                    className="mb-4"
-                    label="Remember password"
-                  />
-
-                  <MDBBtn size="lg">Login</MDBBtn>
+                  <MDBBtn size="lg" onClick={handleLogin}>
+                    Login
+                  </MDBBtn>
 
                   <hr className="my-4" />
 

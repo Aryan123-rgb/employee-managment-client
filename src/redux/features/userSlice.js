@@ -1,12 +1,29 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
   name: "",
   email: "",
   password: "",
   image: "",
+  isAdmin: false,
   attendanceRecord: [],
 };
+
+const BASE_URL = "http://localhost:5000";
+
+export const registerUser = createAsyncThunk(
+  "registerUser",
+  async (userData) => {
+    const response = await axios.post(`${BASE_URL}/user/signup`, userData);
+    return response.data;
+  }
+);
+
+export const loginUser = createAsyncThunk("loginUser", async (userData) => {
+  const response = await axios.post(`${BASE_URL}/user/login`, userData);
+  return response.data;
+});
 
 const userSlice = createSlice({
   name: "user",
@@ -16,6 +33,7 @@ const userSlice = createSlice({
       state.name = action.payload.name;
       state.email = action.payload.email;
       state.password = action.payload.password;
+      state.isAdmin = action.payload.isAdmin;
     },
     setImageURL: (state, action) => {
       state.image = action.payload;

@@ -2,14 +2,16 @@ import React, { useRef, useState, useEffect } from "react";
 import { Button, Container, Grid, Typography } from "@mui/material";
 import Webcam from "webcamjs";
 import { useDispatch, useSelector } from "react-redux";
-import { setImageURL } from "../redux/features/userSlice";
+import { registerUser, setImageURL } from "../redux/features/userSlice";
 import { useNavigate } from "react-router-dom";
 
 const RegistrationPage = () => {
   const navigate = useNavigate();
   const videoRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
-  const { name } = useSelector((state) => state.userReducer);
+  const { name, email, password, isAdmin } = useSelector(
+    (state) => state.userReducer
+  );
 
   const dispatch = useDispatch();
 
@@ -43,6 +45,18 @@ const RegistrationPage = () => {
       Webcam.reset();
     };
   }, []);
+
+  const handleRegister = async () => {
+    const userData = {
+      name: name,
+      email: email,
+      password: password,
+      image: capturedImage,
+      isAdmin: isAdmin,
+    };
+    const reponse = dispatch(registerUser(userData));
+    navigate("/dashboard");
+  };
 
   return (
     <Container>
@@ -104,7 +118,7 @@ const RegistrationPage = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => navigate("/dashboard")}
+              onClick={handleRegister}
             >
               Continue
             </Button>
