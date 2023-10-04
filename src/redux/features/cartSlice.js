@@ -8,6 +8,25 @@ export const getProducts = createAsyncThunk("getProducts", async () => {
   return response.data;
 });
 
+export const saveProductsofCart = createAsyncThunk(
+  "saveProducts",
+  async (carts, email) => {
+    const response = await axios.post("http://localhost:8000/cart/save", {
+      carts,
+      email,
+    });
+    return response.data;
+  }
+);
+
+export const getCartArrayfromDatabase = createAsyncThunk(
+  "getCartfromDatabase",
+  async (email) => {
+    const response = await axios.post("http://localhost:8000/cart/get", email);
+    return response.data;
+  }
+);
+
 const initialState = {
   carts: [],
   status: "idle", //'idle' | 'loading' | 'succeeded' | 'failed',

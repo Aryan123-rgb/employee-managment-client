@@ -18,12 +18,14 @@ import {
   emptyCart,
   incrementQty,
   removeFromCart,
+  saveProductsofCart,
 } from "../redux/features/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { IconButton, Typography } from "@mui/material";
 
 export default function CartPage() {
   const { carts } = useSelector((state) => state.cartReducer);
+  const { email } = useSelector((state) => state.userReducer);
   let totalPrice = 0;
   carts.map((product) => {
     totalPrice += product.qty * product.price;
@@ -189,7 +191,14 @@ export default function CartPage() {
                         <MDBTypography tag="h5">$ {totalPrice}</MDBTypography>
                       </div>
 
-                      <MDBBtn color="dark" block size="lg">
+                      <MDBBtn
+                        color="dark"
+                        block
+                        size="lg"
+                        onClick={() =>
+                          dispatch(saveProductsofCart({carts, email}))
+                        }
+                      >
                         Save
                       </MDBBtn>
                     </div>

@@ -89,7 +89,7 @@ const TakeAttendance = ({ isTakingAttendance, setIsTakingAttendance }) => {
         const match = faceMatcher.findBestMatch(capturedFace.descriptor);
         console.log(match);
 
-        if (match.distance > 0.3) {
+        if (match.distance > 0.1) {
           alert(`Face Matched `);
           dispatch(markPresent());
         } else alert("Face didn't matched");

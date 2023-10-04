@@ -10,7 +10,7 @@ const initialState = {
   attendanceRecord: [],
 };
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "http://localhost:8000";
 
 export const registerUser = createAsyncThunk(
   "registerUser",
@@ -24,6 +24,10 @@ export const loginUser = createAsyncThunk("loginUser", async (userData) => {
   const response = await axios.post(`${BASE_URL}/user/login`, userData);
   return response.data;
 });
+
+export const getLoggedInUser = createAsyncThunk("getLoginUserInfo",async() => {
+  const response = await axios.get(``)
+})
 
 const userSlice = createSlice({
   name: "user",

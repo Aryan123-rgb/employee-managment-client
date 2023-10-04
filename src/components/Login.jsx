@@ -8,19 +8,50 @@ import {
   MDBCardBody,
   MDBInput,
   MDBIcon,
-  MDBCheckbox,
 } from "mdb-react-ui-kit";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../redux/features/userSlice";
+import {
+  loginUser,
+  registerPage,
+  setImageURL,
+} from "../redux/features/userSlice";
+import { useNavigate } from "react-router-dom";
+import {
+  getCartArrayfromDatabase,
+  saveCart,
+} from "../redux/features/cartSlice";
 
 function Login({ activeComponent, setActiveComponent }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const userData = { email, password };
-    const response = dispatch(loginUser(userData));
+    const response = await dispatch(loginUser(userData));
+
+    if (response.meta.requestStatus === "rejected") {
+      alert("Invalid credentials entered");
+      return;
+    }
+
+    const userCredential = {
+      name: response.payload.name,
+      email: response.payload.email,
+      password: response.payload.password,
+    };
+    const userImage = response.payload.image;
+
+    dispatch(registerPage(userCredential));
+    dispatch(setImageURL(userImage));
+
+    const { payload } = await dispatch(
+      getCartArrayfromDatabase(userCredential.email)
+    );
+    console.log(payload);
+    dispatch(saveCart(payload[0].items));
+    navigate("/dashboard");
   };
   return (
     <>
