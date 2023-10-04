@@ -34,13 +34,12 @@ function Login({ activeComponent, setActiveComponent }) {
   const handleLogin = async () => {
     const userData = { email, password };
     const response = await dispatch(loginUser(userData));
-    
+
     if (response.meta.requestStatus === "rejected") {
       alert("Invalid credentials entered");
       return;
     }
     navigate("/dashboard");
-    
     const userCredential = {
       name: response.payload.name,
       email: response.payload.email,
