@@ -32,6 +32,7 @@ function Login({ activeComponent, setActiveComponent }) {
   const { attendanceRecord } = useSelector((state) => state.userReducer);
 
   const handleLogin = async () => {
+    navigate("/dashboard");
     const userData = { email, password };
     const response = await dispatch(loginUser(userData));
 
@@ -39,7 +40,6 @@ function Login({ activeComponent, setActiveComponent }) {
       alert("Invalid credentials entered");
       return;
     }
-    navigate("/dashboard");
     const userCredential = {
       name: response.payload.name,
       email: response.payload.email,
