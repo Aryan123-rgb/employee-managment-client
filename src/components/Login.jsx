@@ -41,12 +41,12 @@ function Login({ activeComponent, setActiveComponent }) {
       return;
     }
     const userCredential = {
-      name: response.payload.name,
-      email: response.payload.email,
-      password: response.payload.password,
+      name: response.payload[0].name,
+      email: response.payload[0].email,
+      password: response.payload[0].password,
     };
     const userImage = response.payload.image;
-
+    
     dispatch(registerPage(userCredential));
     dispatch(setImageURL(userImage));
 
