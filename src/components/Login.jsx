@@ -34,12 +34,13 @@ function Login({ activeComponent, setActiveComponent }) {
   const handleLogin = async () => {
     const userData = { email, password };
     const response = await dispatch(loginUser(userData));
-
+    
     if (response.meta.requestStatus === "rejected") {
       alert("Invalid credentials entered");
       return;
     }
-
+    navigate("/dashboard");
+    
     const userCredential = {
       name: response.payload.name,
       email: response.payload.email,
@@ -58,15 +59,14 @@ function Login({ activeComponent, setActiveComponent }) {
     const attendanceLogs = await dispatch(
       getAttendanceLog(userCredential.email)
     );
-    dispatch(saveAttendanceLog(attendanceLogs.payload[0].attendanceLog));
-
-    navigate("/dashboard");
+    console.log(attendanceLogs);
+    dispatch(saveAttendanceLog(attendanceLogs.payload[0]?.attendanceLog));
   };
 
   const handleGuestLogin = () => {
-    setEmail('guest')
-    setPassword('guest')
-  }
+    setEmail("guest");
+    setPassword("guest");
+  };
   return (
     <>
       {activeComponent === "login" && (
@@ -108,8 +108,8 @@ function Login({ activeComponent, setActiveComponent }) {
 
                   <MDBBtn
                     size="lg"
-                    style={{ backgroundColor: "red",marginBlock:'1.2rem' }}
-                    onClick={(handleGuestLogin)}
+                    style={{ backgroundColor: "red", marginBlock: "1.2rem" }}
+                    onClick={handleGuestLogin}
                   >
                     Guest Credentails
                   </MDBBtn>
