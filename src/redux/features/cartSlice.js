@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const BASE_URL = "https://employee-management-api-eqaw.onrender.com";
+
 export const getProducts = createAsyncThunk("getProducts", async () => {
   const response = await axios.get(
     "https://64e0caef50713530432cafa1.mockapi.io/api/products"
@@ -11,7 +13,7 @@ export const getProducts = createAsyncThunk("getProducts", async () => {
 export const saveProductsofCart = createAsyncThunk(
   "saveProducts",
   async (carts, email) => {
-    const response = await axios.post("http://localhost:8000/cart/save", {
+    const response = await axios.post(`${BASE_URL}/cart/save`, {
       carts,
       email,
     });
@@ -22,7 +24,7 @@ export const saveProductsofCart = createAsyncThunk(
 export const getCartArrayfromDatabase = createAsyncThunk(
   "getCartfromDatabase",
   async (email) => {
-    const response = await axios.post("http://localhost:8000/cart/get", email);
+    const response = await axios.post(`${BASE_URL}/cart/get`, email);
     return response.data;
   }
 );

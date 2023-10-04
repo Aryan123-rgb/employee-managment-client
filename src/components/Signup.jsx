@@ -87,27 +87,7 @@ function Signup({ activeComponent, setActiveComponent }) {
                   <MDBBtn size="lg" onClick={handleRegister}>
                     Sign Up
                   </MDBBtn>
-
-                  <hr className="my-4" />
-
-                  <MDBBtn
-                    className="mb-2 w-100"
-                    size="lg"
-                    style={{ backgroundColor: "#dd4b39" }}
-                  >
-                    <MDBIcon fab icon="google" className="mx-2" />
-                    continue with google
-                  </MDBBtn>
-
-                  <MDBBtn
-                    className="mb-4 w-100"
-                    size="lg"
-                    style={{ backgroundColor: "#000000" }}
-                  >
-                    <MDBIcon fab icon="github" className="mx-2" />
-                    continue with GitHub
-                  </MDBBtn>
-                  <p style={{ textAlign: "center" }}>
+                  <p style={{ textAlign: "center", marginTop: "1.2rem" }}>
                     Don't have an account?
                     <span
                       onClick={() => setActiveComponent("login")}
