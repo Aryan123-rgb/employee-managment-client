@@ -25,9 +25,33 @@ export const loginUser = createAsyncThunk("loginUser", async (userData) => {
   return response.data;
 });
 
-export const getLoggedInUser = createAsyncThunk("getLoginUserInfo",async() => {
-  const response = await axios.get(``)
-})
+export const getLoggedInUser = createAsyncThunk(
+  "getLoginUserInfo",
+  async () => {
+    const response = await axios.get(``);
+  }
+);
+
+export const saveAttendance = createAsyncThunk(
+  "saveAttendance",
+  async (attendanceData) => {
+    const response = await axios.post(
+      `${BASE_URL}/attendance/markPresent`,
+      attendanceData
+    );
+    return response.data;
+  }
+);
+
+export const getAttendanceLog = createAsyncThunk(
+  "getAttendance",
+  async (email) => {
+    const response = await axios.post(`${BASE_URL}/attendance/getAttendance`, {
+      email,
+    });
+    return response.data;
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
@@ -52,9 +76,15 @@ const userSlice = createSlice({
         },
       ];
     },
+    saveAttendanceLog: (state, action) => {
+      state.attendanceRecord = action.payload;
+      console.log(state.attendanceRecord);
+      console.log(action.payload);
+    },
   },
 });
 
-export const { registerPage, setImageURL, markPresent } = userSlice.actions;
+export const { registerPage, setImageURL, markPresent, saveAttendanceLog } =
+  userSlice.actions;
 
 export default userSlice.reducer;

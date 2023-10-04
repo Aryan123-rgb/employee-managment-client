@@ -3,7 +3,7 @@ import { Button, Grid, Typography, Paper } from "@mui/material";
 import Webcam from "webcamjs";
 import * as faceapi from "face-api.js";
 import { useDispatch, useSelector } from "react-redux";
-import { markPresent } from "../redux/features/userSlice";
+import { markPresent, saveAttendance } from "../redux/features/userSlice";
 
 const TakeAttendance = ({ isTakingAttendance, setIsTakingAttendance }) => {
   const videoRef = useRef(null);
@@ -11,6 +11,7 @@ const TakeAttendance = ({ isTakingAttendance, setIsTakingAttendance }) => {
   const referencedImage = useSelector((state) => state.userReducer.image);
   const [capturedImage, setCapturedImage] = useState(null);
   const dispatch = useDispatch();
+  const { attendanceRecord, email } = useSelector((state) => state.userReducer);
 
   const initializeWebcam = () => {
     Webcam.set({
@@ -103,6 +104,14 @@ const TakeAttendance = ({ isTakingAttendance, setIsTakingAttendance }) => {
     }
   };
 
+  const handleCancel = async () => {
+    const response = await dispatch(
+      saveAttendance({ attendanceRecord, email })
+    );
+    console.log(response);
+    setIsTakingAttendance(false);
+  };
+
   return (
     <>
       <div
@@ -149,7 +158,7 @@ const TakeAttendance = ({ isTakingAttendance, setIsTakingAttendance }) => {
               variant="contained"
               color="primary"
               style={{ marginTop: "1rem", backgroundColor: "red" }}
-              onClick={() => setIsTakingAttendance(false)}
+              onClick={handleCancel}
             >
               Cancel
             </Button>

@@ -9,10 +9,13 @@ import {
   MDBInput,
   MDBIcon,
 } from "mdb-react-ui-kit";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  getAttendanceLog,
   loginUser,
   registerPage,
+  saveAttendance,
+  saveAttendanceLog,
   setImageURL,
 } from "../redux/features/userSlice";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +29,7 @@ function Login({ activeComponent, setActiveComponent }) {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { attendanceRecord } = useSelector((state) => state.userReducer);
 
   const handleLogin = async () => {
     const userData = { email, password };
@@ -49,10 +53,20 @@ function Login({ activeComponent, setActiveComponent }) {
     const { payload } = await dispatch(
       getCartArrayfromDatabase(userCredential.email)
     );
-    console.log(payload);
     dispatch(saveCart(payload[0].items));
+
+    const attendanceLogs = await dispatch(
+      getAttendanceLog(userCredential.email)
+    );
+    dispatch(saveAttendanceLog(attendanceLogs.payload[0].attendanceLog));
+
     navigate("/dashboard");
   };
+
+  const handleGuestLogin = () => {
+    setEmail('guest')
+    setPassword('guest')
+  }
   return (
     <>
       {activeComponent === "login" && (
@@ -92,24 +106,12 @@ function Login({ activeComponent, setActiveComponent }) {
                     Login
                   </MDBBtn>
 
-                  <hr className="my-4" />
-
                   <MDBBtn
-                    className="mb-2 w-100"
                     size="lg"
-                    style={{ backgroundColor: "#dd4b39" }}
+                    style={{ backgroundColor: "red",marginBlock:'1.2rem' }}
+                    onClick={(handleGuestLogin)}
                   >
-                    <MDBIcon fab icon="google" className="mx-2" />
-                    continue with google
-                  </MDBBtn>
-
-                  <MDBBtn
-                    className="mb-4 w-100"
-                    size="lg"
-                    style={{ backgroundColor: "#000000" }}
-                  >
-                    <MDBIcon fab icon="github" className="mx-2" />
-                    continue with GitHub
+                    Guest Credentails
                   </MDBBtn>
                   <p style={{ textAlign: "center" }}>
                     Don't have an account?
